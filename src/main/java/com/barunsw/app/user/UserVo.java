@@ -10,4 +10,9 @@ import lombok.ToString;
 public class UserVo {
 	private String userId;
 	private String userPassword;
+	
+	public UserVo() {}
+	public UserVo(String userId) {
+		this.setUserId(userId);
+	}
 }

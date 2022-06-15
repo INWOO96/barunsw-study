@@ -18,4 +18,8 @@ public class UserService {
 	public List<UserVo> getUserList() throws Exception {
 		return userMapper.getUserList();
 	}
+	
+	public UserVo getUser(UserVo userVo) throws Exception {
+		return userMapper.getUser(userVo);
+	}
 }

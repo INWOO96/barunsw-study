@@ -3,8 +3,15 @@
 
 <mapper namespace="com.barunsw.app.mapper.UserMapper">
 	<select id="getUserList" resultType="com.barunsw.app.user.UserVo">
+		SELECT 
+			user_id AS userId, user_password AS userPassword
+		FROM tb_user
+	</select>
+	
+	<select id="getUser" resultType="com.barunsw.app.user.UserVo">
 		select 
-			user_id as userId, user_password as userPassword
-		from tb_user
+			user_id AS userId, user_password AS userPassword
+		FROM tb_user
+		WHERE user_id = #{userId}
 	</select>
 </mapper>
