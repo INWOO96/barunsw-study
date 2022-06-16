@@ -1,6 +1,5 @@
 package com.barunsw.app.spring;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import com.barunsw.app.user.UserService;
 import com.barunsw.app.user.UserVo;
@@ -30,8 +29,7 @@ public class SecurityProvider implements AuthenticationManager {
 			if ( userVo != null ) {
 				String passwordParam = EncryptionUtil.encryptSHA512(authentication.getCredentials().toString());
 				if ( userVo.getUserPassword().equals(passwordParam) ) {
-			        List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-					roles.add(new SimpleGrantedAuthority("ADMIN"));
+			        List<GrantedAuthority> roles = AuthorityUtils.createAuthorityList("ADMIN");
 					UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials(), roles);
 					log.info("isAuthenticated : {}",token.isAuthenticated());
 			        return token;

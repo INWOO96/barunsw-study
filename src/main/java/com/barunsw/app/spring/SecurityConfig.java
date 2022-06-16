@@ -13,7 +13,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
             .antMatchers( "/login", "/resources/**").permitAll() // 로그인 권한은 누구나, resources파일도 모든권한
-            .antMatchers("/app/**").hasRole("ADMIN")
+            .antMatchers("/app/**").hasAuthority("ADMIN")
             .and()
             .formLogin()
             .loginPage("/login")
