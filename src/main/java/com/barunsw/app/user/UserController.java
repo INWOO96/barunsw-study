@@ -4,13 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.log4j.Log4j2;
 
-@RestController
+@Controller
 @Log4j2
+@RequestMapping("/app/user")
 public class UserController {
 	
 	
@@ -20,8 +23,8 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@GetMapping("/app/user/list")
-	public Map<String, Object> getUserList() {
+	@GetMapping("/list")
+	public @ResponseBody Map<String, Object> getUserList() {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<UserVo> userInfo = null;
 		

@@ -10,6 +10,8 @@ import lombok.ToString;
 public class UserVo {
 	private String userId;
 	private String userPassword;
+	private String phone;
+	private String email;
 	
 	public UserVo() {}
 	public UserVo(String userId) {

@@ -14,4 +14,22 @@
 		FROM tb_user
 		WHERE user_id = #{userId}
 	</select>
+	
+	
+	<insert id="save" parameterType="com.barunsw.app.user.UserVo">
+		insert into
+			tb_user (
+				user_id,
+				user_password,
+				phone,
+				email
+			)
+		values (
+			#{userId},
+			#{userPassword},
+			#{phone},
+			#{email}
+		)
+		
+	</insert>
 </mapper>
