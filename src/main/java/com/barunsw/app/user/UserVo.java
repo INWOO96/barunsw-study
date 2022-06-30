@@ -3,10 +3,12 @@ package com.barunsw.app.user;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 @Setter
 @Getter
-@ToString
+@ToString(exclude = "userPassword")
+@Accessors(chain = true)
 public class UserVo {
 	private String userId;
 	private String userPassword;

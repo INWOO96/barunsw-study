@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper	namespace="com.barunsw.app.mapper.ExampleMapper">
+
+	<select id="selectMySelf" resultType="com.barunsw.app.example.MySelfVo">
+		SELECT * FROM tb_about_myself LIMIT 1
+	</select>
+	
+	<select id="selectMyResume" resultType="com.barunsw.app.example.ResumeVo">
+		SELECT * FROM tb_my_resume ORDER BY "date" DESC
+	</select>
+	
+	<select id="selectApplication" resultType="com.barunsw.app.example.ApplicationVo">
+		SELECT * 
+		FROM tb_application 
+		ORDER BY "date" ASC
+	</select>
+	
+	<insert id="insertResumes" parameterType="java.util.List">
+		INSERT INTO tb_my_resume (date, title, content, url)
+		VALUES 
+		<foreach collection="list" item="item" separator=", " >
+    	(
+			TO_TIMESTAMP(#{item.date}, 'YYYY-MM-DD'), #{item.title}, #{item.content}, #{item.url}
+		)
+		</foreach>
+	</insert>
+	
+	<insert id="insertApplication" parameterType="java.util.List">
+		INSERT INTO tb_application (name, content, date, platform, url, image)
+		VALUES 
+		<foreach collection="list" item="item" separator=", " >
+    	(
+			#{item.name}, #{item.content}, TO_TIMESTAMP(#{item.date}, 'YYYY-MM-DD'),
+			#{item.platform}, #{item.url}, #{item.image}
+		)
+		</foreach>
+	</insert>
+	
+	<select id="selectTodoList" resultType="com.barunsw.app.example.TodoVo">
+		SELECT id, job, TO_CHAR("date", 'YYYY-MM-DD') as "date", completed FROM tb_todo ORDER BY id
+	</select>
+	
+	<insert id="insertTodo" parameterType="com.barunsw.app.example.TodoVo">
+		INSERT INTO tb_todo (job, completed, date) 
+		VALUES (#{job}, #{completed}, TO_TIMESTAMP(#{date}, 'YYYY-MM-DD'))
+	</insert>
+	
+	<update id="updateTodo" parameterType="com.barunsw.app.example.TodoVo">
+		UPDATE tb_todo SET completed = #{completed} WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteTodo" parameterType="com.barunsw.app.example.TodoVo">
+		DELETE FROM tb_todo WHERE id = #{id}
+	</delete>
+	
+	<select id="selectPostList" resultType="com.barunsw.app.example.PostVo">
+		SELECT * FROM tb_blog ORDER BY id DESC
+	</select>
+	 
+	<select id="selectOnePost" parameterType="int">
+		SELECT * FROM tb_blog 
+		<if test="value > 0">
+			WHERE id = #{value}
+		</if>
+		ORDER BY ID DESC
+		LIMIT 1
+	</select> 
+	
+	<insert id="insertPost" parameterType="com.barunsw.app.example.PostVo">
+		INSERT INTO tb_blog (title, post) 
+		VALUES (#{title}, #{post})
+	</insert>
+	
+	<update id="updatePost" parameterType="com.barunsw.app.example.PostVo">
+		UPDATE tb_blog SET title = #{title}, post = #{post} 
+		WHERE ID = #{id}
+	</update>
+	
+	<delete id="deletePost" parameterType="com.barunsw.app.example.PostVo">
+		DELETE FROM tb_blog WHERE id = #{id}
+	</delete>
+	
+</mapper>
