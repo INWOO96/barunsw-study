@@ -63,7 +63,7 @@ export default {
 				</small>
 				<div class="form-group mb-1">
 					<label>아이디</label>
-					<input type="text" id="username" name="username" class="form-control" placeholder="E-Mail"
+					<input type="text" id="username" name="username" class="form-control" placeholder="ID"
 						autocomplete="username" required ref="ref_email" v-model="email"/>
 				</div>
 				<div class="form-group">

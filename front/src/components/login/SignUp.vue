@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed, provide } from 'vue'
 import { router } from '/@router/router.js'
 import useAxios from '/@app_modules/axios.js'
+import LoginAlert from '/@components/login/LoginAlert.vue'
 
 const { axiosGet, axiosPost } = useAxios()
 const invalid = ref('nok')
@@ -11,18 +12,34 @@ const rePassword = ref('')
 const phone = ref('')
 const email = ref('')
 
+const message = ref('')
+const alert = ref('off')
+
 watch([() => userId.value],
 	([new_userId], [old_userId]) => {
 		if (invalid.value !== 'nok' && new_userId !== old_userId) {
 			invalid.value = 'nok'
 		}
 	},
-	{immediate: true,}
+	{immediate: true}
 )
+watch(
+	() => message.value,
+	(message) => { 
+		if (message) alert.value = 'on' 
+	},
+	{immediate: true}
+)
+
+const popupClear = () => {
+	alert.value = 'off'
+}
+
+provide('popupClear', popupClear)
 
 const idCheck = () => {
 	if (!userId.value) {
-		alert('아이디를 입력하세요')
+		message.value = '아이디를 입력하세요'
 		return;
 	}
 	axiosGet('/signUp?id=' + userId.value, (resp) => {
@@ -38,11 +55,11 @@ const idCheck = () => {
 const cancel = () => { router.push('/login') }
 const onSubmit = (evt) => {
 	if (invalid.value == 'nok') {
-		alert('아이디 중복확인을 클릭하세요')
+		message.value = '아이디 중복확인을 클릭하세요'
 		return false
 	}
 	if (invalid.value == 'invalid') {
-		alert('사용할 수 없는 아이디 입니다.')
+		message.value = '사용할 수 없는 아이디 입니다.'
 		return false
 	}
 
@@ -51,19 +68,19 @@ const onSubmit = (evt) => {
 	const regEmail 	= /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/
 	
 	if (!pwdCheck.test(userPassword.value)) {
-		alert("비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.")
+		message.value = '비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.'
 		return false
 	}
 	if (userPassword.value != rePassword.value) {
-		alert("비밀번호가 일치하지 않습니다.")
+		message.value = '비밀번호가 일치하지 않습니다.'
 		return false
 	}
 	if (!regPhone.test(phone.value)) {
-		alert('휴대전화 형식을 맞춰 다시 입력해주세요\n ex) 010-0000-0000')
+		message.value = '휴대전화 형식을 맞춰 다시 입력해주세요\n ex) 010-0000-0000'
 		return false
 	}
 	if (!regEmail.test(email.value)) {
-		alert('이메일 형식에 맞춰 다시 입력해주세요\n ex) xxx@xxx.xxx')
+		message.value = '이메일 형식에 맞춰 다시 입력해주세요\n ex) xxx@xxx.xxx'
 		return false
 	}
 
@@ -73,18 +90,17 @@ const onSubmit = (evt) => {
 	sign.append('phone', phone.value)
 	sign.append('email', email.value)
 
+	console.log('try signUp')
 	axiosPost('/signUp', sign, (resp) => {
+
 		if (resp) {
-			alert('가입완료 되었습니다.\n로그인 화면으로 이동합니다.')
 			router.push('/login')
 		}
 		else {
-			alert('회원 가입에 실패하였습니다.')
 			location.reload()
 		}
 	})
 }
-
 
 </script>
 
@@ -94,6 +110,7 @@ const onSubmit = (evt) => {
 			<h2>회원 가입 폼</h2>
 		</div>
 		<h4 class="mb-3">회원 가입</h4>
+		<LoginAlert :message="message" v-if="alert == 'on'"/>
 		<form @submit.prevent="onSubmit">
 			<div>
 				<label for="userId">아이디</label> 
