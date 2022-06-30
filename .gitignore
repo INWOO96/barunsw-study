@@ -6,6 +6,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,eclipse,java,node,vue
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,eclipse,java,node,vue
 
+rebel.xml
+
+### DBBEAR ###
+.dbeaver
+
 ### Eclipse ###
 .metadata
 bin/
