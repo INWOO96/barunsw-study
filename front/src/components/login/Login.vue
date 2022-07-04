@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { router } from '/@router/router.js'
 import { useSession } from '/@compositions/session.js'
 import useAxios from '/@app_modules/axios.js'
@@ -8,7 +8,8 @@ export default {
 	setup() {
 		const { axiosGet, axiosPost } = useAxios();
 		const { setData } = useSession()
-
+	
+		const toast = inject('toast', '')
 		const email = ref('')
 		const password = ref('')
 		const invalid = ref('ok')
@@ -20,10 +21,12 @@ export default {
 		const loginFail = (fail) => {
 			if (fail.response.status == 401) {
 					invalid.value = 'no_email'
+					toast.value = '사용자 정보를 잘못 입력하였습니다.'
 			}
 			else {
 				invalid.value = 'err'
-				console.log(fail.response)
+				toast.value = 'Error가 발생하였습니다.\n 관리자에게 문의하세요.'
+				console.log(fail)
 			}
 		}
  		const onSubmit = (evt) => {

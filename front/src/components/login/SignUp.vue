@@ -1,8 +1,8 @@
 <script setup>
-import { ref, watch, computed, provide } from 'vue'
+import { ref, watch, computed, provide, inject } from 'vue'
 import { router } from '/@router/router.js'
 import useAxios from '/@app_modules/axios.js'
-import LoginAlert from '/@components/login/LoginAlert.vue'
+//import LoginAlert from '/@components/login/LoginAlert.vue'
 
 const { axiosGet, axiosPost } = useAxios()
 const invalid = ref('nok')
@@ -15,6 +15,8 @@ const email = ref('')
 const message = ref('')
 const alert = ref('off')
 
+const toast = inject('toast', '')
+
 watch([() => userId.value],
 	([new_userId], [old_userId]) => {
 		if (invalid.value !== 'nok' && new_userId !== old_userId) {
@@ -23,24 +25,25 @@ watch([() => userId.value],
 	},
 	{immediate: true}
 )
-watch(
-	() => message.value,
-	(message) => { 
-		if (message) alert.value = 'on' 
-	},
-	{immediate: true}
-)
+
+// watch(
+// 	() => message.value,
+// 	(message) => { 
+// 		if (message) alert.value = 'on' 
+// 	},
+// 	{immediate: true}
+// )
 
 const popupClear = () => {
 	alert.value = 'off'
-	message.value = ''
+	//toast.value = ''
 }
 
 provide('popupClear', popupClear)
 
 const idCheck = () => {
 	if (!userId.value) {
-		message.value = '아이디를 입력하세요'
+		toast.value = '아이디를 입력하세요'
 		return;
 	}
 	axiosGet('/signUp?id=' + userId.value, (resp) => {
@@ -56,11 +59,11 @@ const idCheck = () => {
 const cancel = () => { router.push('/login') }
 const onSubmit = (evt) => {
 	if (invalid.value == 'nok') {
-		message.value = '아이디 중복확인을 클릭하세요'
+		toast.value = '아이디 중복확인을 클릭하세요'
 		return false
 	}
 	if (invalid.value == 'invalid') {
-		message.value = '사용할 수 없는 아이디 입니다.'
+		toast.value = '사용할 수 없는 아이디 입니다.'
 		return false
 	}
 
@@ -69,19 +72,19 @@ const onSubmit = (evt) => {
 	const regEmail 	= /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/
 	
 	if (!pwdCheck.test(userPassword.value)) {
-		message.value = '비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.'
+		toast.value = '비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.'
 		return false
 	}
 	if (userPassword.value != rePassword.value) {
-		message.value = '비밀번호가 일치하지 않습니다.'
+		toast.value = '비밀번호가 일치하지 않습니다.'
 		return false
 	}
 	if (!regPhone.test(phone.value)) {
-		message.value = '휴대전화 형식을 맞춰 다시 입력해주세요\n ex) 010-0000-0000'
+		toast.value = '휴대전화 형식을 맞춰 다시 입력해주세요\n ex) 010-0000-0000'
 		return false
 	}
 	if (!regEmail.test(email.value)) {
-		message.value = '이메일 형식에 맞춰 다시 입력해주세요\n ex) xxx@xxx.xxx'
+		toast.value = '이메일 형식에 맞춰 다시 입력해주세요\n ex) xxx@xxx.xxx'
 		return false
 	}
 
@@ -91,7 +94,7 @@ const onSubmit = (evt) => {
 	sign.append('phone', phone.value)
 	sign.append('email', email.value)
 
-	console.log('try signUp')
+	//console.log('try signUp')
 	axiosPost('/signUp', sign, (resp) => {
 
 		if (resp) {
@@ -111,7 +114,7 @@ const onSubmit = (evt) => {
 			<h2>회원 가입 폼</h2>
 		</div>
 		<h4 class="mb-3">회원 가입</h4>
-		<LoginAlert :message="message" v-if="alert == 'on'"/>
+		<!-- <LoginAlert :message="message" v-if="alert == 'on'"/> -->
 		<form @submit.prevent="onSubmit">
 			<div>
 				<label for="userId">아이디</label> 
