@@ -33,6 +33,7 @@ watch(
 
 const popupClear = () => {
 	alert.value = 'off'
+	message.value = ''
 }
 
 provide('popupClear', popupClear)

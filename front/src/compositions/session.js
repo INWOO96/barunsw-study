@@ -5,7 +5,7 @@ export const useSession = () => {
 	const auth = reactive({id: null})
 	const setData = (id, name) => {
 		localStorage.setItem('id', id)
-		localStorage.setItem('id', name)
+		localStorage.setItem('name', name)
 
 		auth.id = id
 	}

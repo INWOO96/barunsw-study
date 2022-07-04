@@ -5,7 +5,8 @@ export default function () {
 	const commuicating = ref(false)
 	const BASE_URL = 'http://localhost:8080'
 	const creatURL = (url) => {
-		return url.startsWith('http') ? url : BASE_URL + url
+		return url
+		//return url.startsWith('https') ? url : BASE_URL + url
 	}
 
 	const checkResult = (resp, onSuccess, onFailed) => {
@@ -27,10 +28,10 @@ export default function () {
 			}
 		}
 	}
-
 	const axiosGet = async (url, onSuccess = null, onFailed = null) => {
 		commuicating.value = true
-		axios.get(creatURL(url)).then((resp) => {
+		axios.get(creatURL(url))
+			.then((resp) => {
 				checkResult(resp, onSuccess, onFailed)
 			})
 			.catch((err) => {

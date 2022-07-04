@@ -9,8 +9,9 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 	const id = localStorage.getItem('id')
-	if (!id && to.name !== 'login') {
-		console.log('go login')
+	
+	if (!id && !(to.name == 'login' || to.name == 'signup' )) {
+		console.log('no login info go login')
 		 next('/login')
 	}
 	else {
