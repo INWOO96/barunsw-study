@@ -15,4 +15,8 @@ public class ApplicationVo {
 	private String url;
 	private String image;
 	
+	public String getDate() {
+		return this.date.substring(0, 10);
+	}
+	
 }
